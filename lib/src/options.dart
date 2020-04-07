@@ -10,18 +10,18 @@ class Options {
   List<DateTime> except;
   DateTime starts;
   DateTime until;
-  DateTime through;
   int repeat;
   bool shift;
+  int interval;
 
   Options({
     this.except,
     this.frequency,
     this.starts,
     this.until,
-    this.through,
     this.repeat,
-    this.shift
+    this.shift,
+    this.interval
   });
 
   isValid() => this.frequency == null ? false : true;

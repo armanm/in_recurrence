@@ -1,36 +1,36 @@
 // fnando/recurrence
 
+import 'package:jiffy/jiffy.dart';
+
 abstract class EventBase {
   DateTime date;
   DateTime startDate;
   DateTime until;
-  bool finished = false;
+  bool _finished = false;
   int interval;
   int repeat;
   bool shift;
-  DateTime through;
 
-  EventBase.fromOptions(DateTime date, [
-    int interval = 1,
-    int repeat = 1,
-    bool shift = false,
-    DateTime until = null,
-    DateTime through = null
-  ]) {
-    if (interval < 1) {
+  EventBase.fromOptions(
+    DateTime starts,
+    int interval,
+    int repeat,
+    bool shift,
+    DateTime until,
+  ) {
+    if (interval != null && interval < 1) {
       throw new Exception("interval should be greater than zero");
     }
 
-    if (repeat < 1) {
+    if (repeat != null && repeat < 1) {
       throw new Exception("repeat should be greater than zero");
     }
 
-    this.date = date;
-    this.interval = interval;
+    this.date = starts;
+    this.interval = interval != null ? interval : 1;
+    this.until = until == null ? Jiffy().add(years: 10) : until;
     this.repeat = repeat;
     this.shift = shift;
-    this.until = until;
-    this.through = through;
 
     prepare();
   }
@@ -43,43 +43,31 @@ abstract class EventBase {
   }
 
   void prepare() {
-    startDate = nextBang();
-    date = null;
-  }
-
-  void reset() {
+    startDate = next();
     date = null;
   }
 
   DateTime next() {
-    if (finished) return null;
-    if (date != null) return date;
-    return startDate;
-  }
-
-  DateTime nextBang() {
-    if (finished) {
+    if (_finished) {
       return null;
     }
 
     if (startDate != null && date == null) {
       date = startDate;
-      return date;
+      return _withoutTime(date);
     }
 
     date = nextInRecurrence();
-    finished = through != null && date.compareTo(through) > 0;
-
     if (date.compareTo(until) > 0) {
-      finished = true;
+      _finished = true;
       date = null;
     }
 
-    if (date != null && shift) {
+    if (date != null && shift != null && shift) {
       shiftTo(date);
     }
 
-    return date;
+    return _withoutTime(date);
   }
 
   bool isInitialized() {
@@ -93,4 +81,9 @@ abstract class EventBase {
   bool isValidWeekdayOrWeekdayName(int day){
     return day >= 0 && day <= 6;
   }
+
+  DateTime _withoutTime(DateTime date) {
+    return date == null ? null : new DateTime(date.year, date.month, date.day);
+  }
+
 }
