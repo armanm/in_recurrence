@@ -1,0 +1,5 @@
+name: in_recurrence
+description: >-
+  A paclage for handling recurring events
+dev_dependencies:
+  test: ^1.3.4
