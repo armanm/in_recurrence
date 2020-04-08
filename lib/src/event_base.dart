@@ -1,36 +1,34 @@
 // fnando/recurrence
 
 import 'package:jiffy/jiffy.dart';
+import 'options.dart';
 
 abstract class EventBase {
+  Options options;
+
   DateTime date;
   DateTime startDate;
   DateTime until;
-  bool _finished = false;
   int interval;
-  int repeat;
-  bool shift;
 
-  EventBase.fromOptions(
-    DateTime starts,
-    int interval,
-    int repeat,
-    bool shift,
-    DateTime until,
-  ) {
-    if (interval != null && interval < 1) {
+  bool _finished = false;
+
+  EventBase(Options options) {
+    this.options = options;
+
+    validate();
+
+    if (options.interval != null && options.interval < 1) {
       throw new Exception("interval should be greater than zero");
     }
 
-    if (repeat != null && repeat < 1) {
+    if (options.repeat != null && options.repeat < 1) {
       throw new Exception("repeat should be greater than zero");
     }
 
-    this.date = starts;
-    this.interval = interval != null ? interval : 1;
-    this.until = until == null ? Jiffy().add(years: 10) : until;
-    this.repeat = repeat;
-    this.shift = shift;
+    this.date = options.starts;
+    this.interval = options.interval != null ? options.interval : 1;
+    this.until = options.until == null ? Jiffy().add(years: 10) : options.until;
 
     prepare();
   }
@@ -63,7 +61,7 @@ abstract class EventBase {
       date = null;
     }
 
-    if (date != null && shift != null && shift) {
+    if (date != null && options.shift != null && options.shift) {
       shiftTo(date);
     }
 
@@ -79,11 +77,14 @@ abstract class EventBase {
   }
 
   bool isValidWeekdayOrWeekdayName(int day){
-    return day >= 0 && day <= 6;
+    if (day < 1 && day > 7) {
+      throw new Exception("invalid day of the week $day");
+    }
+
+    return true;
   }
 
   DateTime _withoutTime(DateTime date) {
     return date == null ? null : new DateTime(date.year, date.month, date.day);
   }
-
 }

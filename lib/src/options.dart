@@ -13,6 +13,7 @@ class Options {
   int repeat;
   bool shift;
   int interval;
+  List<int> onDays;
 
   Options({
     this.except,
@@ -21,7 +22,8 @@ class Options {
     this.until,
     this.repeat,
     this.shift,
-    this.interval
+    this.interval,
+    this.onDays
   });
 
   isValid() => this.frequency == null ? false : true;

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:in_recurrence/src/event_base.dart';
 import 'package:in_recurrence/src/event_daily.dart';
+import 'package:in_recurrence/src/event_weekly.dart';
 import 'package:in_recurrence/src/options.dart';
 
 class InRecurrence with IterableMixin<DateTime> {
@@ -30,13 +31,9 @@ class InRecurrence with IterableMixin<DateTime> {
   EventBase _initializeEvent() {
     switch (options.frequency) {
       case Frequency.daily:
-        return new EventDaily.fromOptions(
-          options.starts,
-          options.interval,
-          options.repeat,
-          options.shift,
-          options.until
-        );
+        return new EventDaily(options);
+      case Frequency.weekly:
+        return new EventWeekly(options);
 
       default:
         throw new Exception('${options.frequency} is not supported');

@@ -1,13 +1,8 @@
 import 'package:in_recurrence/src/event_base.dart';
+import 'options.dart';
 
 class EventDaily extends EventBase {
-  EventDaily.fromOptions(
-    DateTime date,
-    int interval,
-    int repeat,
-    bool shift,
-    DateTime until,
-  ) : super.fromOptions(date, interval, repeat, shift, until);
+  EventDaily(Options options) : super(options);
 
   @override
   void validate() {

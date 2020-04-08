@@ -36,32 +36,4 @@ void main() {
       expect(recurrences.length, equals(expectedResult));
     });
   });
-
-  test('InRecurrence.includesDate() false when required date is before the event start', () {
-    var options = new Options(frequency: Frequency.daily, starts: now);
-    var recurrence = new InRecurrence(options);
-
-    expect(
-      recurrence.includesDate(
-        now.subtract(new Duration(days: 1))
-      ),
-      equals(false)
-    );
-  });
-
-  test('InRecurrence.includesDate() false when required date is after the event until', () {
-    var options = new Options(
-      frequency: Frequency.daily,
-      starts: now,
-      until: now.add(new Duration(days: 1))
-    );
-    var recurrence = new InRecurrence(options);
-
-    expect(
-      recurrence.includesDate(
-        now.add(new Duration(days: 2))
-      ),
-      equals(false)
-    );
-  });
 }
