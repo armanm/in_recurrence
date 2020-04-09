@@ -5,6 +5,25 @@ enum Frequency {
   yearly
 }
 
+enum Ordinal {
+  first,
+  second,
+  third,
+  fourth,
+  fifth,
+  last
+}
+
+enum Weekday {
+  sunday,
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday
+}
+
 class Options {
   Frequency frequency;
   List<DateTime> except;
@@ -13,7 +32,10 @@ class Options {
   int repeat;
   bool shift;
   int interval;
-  List<int> onDays;
+  List<int> onWeekDays;
+  int onMonthDay;
+  Ordinal ordinal;
+  Weekday weekday;
 
   Options({
     this.except,
@@ -23,7 +45,10 @@ class Options {
     this.repeat,
     this.shift,
     this.interval,
-    this.onDays
+    this.onWeekDays,
+    this.onMonthDay,
+    this.ordinal,
+    this.weekday
   });
 
   isValid() => this.frequency == null ? false : true;

@@ -10,7 +10,7 @@ void main() {
       frequency: Frequency.weekly,
       starts: new DateTime(2020, 4, 8),
       until: now.add(Duration(days: 14)),
-      onDays: [3, 4]
+      onWeekDays: [3, 4]
     );
     var recurrences = new InRecurrence(options);
     // until will default to 10 years from now

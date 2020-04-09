@@ -9,6 +9,12 @@ class EventDaily extends EventBase {
     // noop
   }
 
+  @override
+  void shiftTo(DateTime date) {
+    // noop
+  }
+
+  @override
   DateTime nextInRecurrence() {
     return isInitialized()
       ? date.add(new Duration(days: interval))

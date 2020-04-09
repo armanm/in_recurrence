@@ -26,7 +26,7 @@ abstract class EventBase {
       throw new Exception("repeat should be greater than zero");
     }
 
-    this.date = options.starts;
+    this.date = DateTime.utc(options.starts.year, options.starts.month, options.starts.day);
     this.interval = options.interval != null ? options.interval : 1;
     this.until = options.until == null ? Jiffy().add(years: 10) : options.until;
 
@@ -36,9 +36,7 @@ abstract class EventBase {
   void validate();
   DateTime nextInRecurrence();
 
-  shiftTo(DateTime date) {
-    // noop
-  }
+  void shiftTo(DateTime date);
 
   void prepare() {
     startDate = next();
@@ -52,7 +50,7 @@ abstract class EventBase {
 
     if (startDate != null && date == null) {
       date = startDate;
-      return _withoutTime(date);
+      return date;
     }
 
     date = nextInRecurrence();
@@ -65,7 +63,7 @@ abstract class EventBase {
       shiftTo(date);
     }
 
-    return _withoutTime(date);
+    return date;
   }
 
   bool isInitialized() {
@@ -73,18 +71,12 @@ abstract class EventBase {
   }
 
   bool isValidMonthDay(int day) {
-    return day >= 1 || day <= 31;
+    if (day >= 1 || day <= 31) return true;
+    throw new Exception("invalid day of the month $day");
   }
 
   bool isValidWeekdayOrWeekdayName(int day){
-    if (day < 1 && day > 7) {
-      throw new Exception("invalid day of the week $day");
-    }
-
-    return true;
-  }
-
-  DateTime _withoutTime(DateTime date) {
-    return date == null ? null : new DateTime(date.year, date.month, date.day);
+    if (day > 0 && day <= 7) return true;
+    throw new Exception("invalid day of the week $day");
   }
 }

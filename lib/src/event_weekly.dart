@@ -8,7 +8,7 @@ class EventWeekly extends EventBase {
 
   @override
   void validate() {
-    options.onDays.forEach((day) => {
+    options.onWeekDays.forEach((day) => {
       if (isValidWeekdayOrWeekdayName(day))
         _onDaysOfWeek.add(day)
     });
@@ -37,5 +37,10 @@ class EventWeekly extends EventBase {
     }
 
     return date.add(new Duration(days: daysToAdd));
+  }
+
+  @override
+  void shiftTo(DateTime date) {
+    // noop
   }
 }
